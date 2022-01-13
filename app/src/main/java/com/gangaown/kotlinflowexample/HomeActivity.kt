@@ -28,7 +28,7 @@ class HomeActivity : ComponentActivity() {
             KotlinFlowExampleTutorialTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
-                    Greeting("Ganga .....")
+                    Greeting(" .....")
                 }
                 val viewModel = viewModel<HomeViewModel>()
                 val time = viewModel.countDownFlow.collectAsState(initial = 10)
