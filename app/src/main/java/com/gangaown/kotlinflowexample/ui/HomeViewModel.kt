@@ -8,29 +8,10 @@ import kotlinx.coroutines.launch
 
 class HomeViewModel: ViewModel() {
 
-    val countDownFlow = flow {
-        val startingVal = 5
-        var curValue = startingVal
-        emit(startingVal)
-        while (curValue>0){
-            delay(1000L)
-            curValue--
-            emit(curValue)
-        }
-    }
-    init {
-        collectFlow()
-    }
+    private val _stateFlow = MutableStateFlow(0)
+    val stateFlow = _stateFlow.asStateFlow()
 
-    private fun collectFlow(){
-
-        viewModelScope.launch {
-            val foldResult = countDownFlow
-                .fold(100) { accumulator, value ->
-                    accumulator + value
-                }
-            println("The result is $foldResult")
-            }
-
-        }
+    fun incrementCounter(){
+        _stateFlow.value += 1
     }
+}

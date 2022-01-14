@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -31,14 +32,11 @@ class HomeActivity : ComponentActivity() {
                     Greeting(" .....")
                 }
                 val viewModel = viewModel<HomeViewModel>()
-                val time = viewModel.countDownFlow.collectAsState(initial = 10)
-                Box(modifier = Modifier.fillMaxSize()){
-                    Text(
-                        text = time.value.toString(),
-                        fontSize  = 50.sp,
-                        fontStyle = FontStyle.Italic,
-                        modifier =  Modifier.align(Alignment.Center)
-                    )
+                val count = viewModel.stateFlow.collectAsState(initial = 0)
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
+                    Button(onClick = { viewModel.incrementCounter() }) {
+                        Text(text = "Counter value ${count.value}")
+                    }
                 }
             }
         }
