@@ -25,11 +25,11 @@ class HomeViewModel: ViewModel() {
     private fun collectFlow(){
 
         viewModelScope.launch {
-            val reduceResult = countDownFlow
+            val foldResult = countDownFlow
                 .fold(100) { accumulator, value ->
                     accumulator + value
                 }
-            println("The result is $reduceResult")
+            println("The result is $foldResult")
             }
 
         }
