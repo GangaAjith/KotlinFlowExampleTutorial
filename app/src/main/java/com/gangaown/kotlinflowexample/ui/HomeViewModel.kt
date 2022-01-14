@@ -26,10 +26,10 @@ class HomeViewModel: ViewModel() {
 
         viewModelScope.launch {
             val reduceResult = countDownFlow
-                .reduce{ accumulator, value ->
+                .fold(100) { accumulator, value ->
                     accumulator + value
                 }
-            println("The count is $reduceResult")
+            println("The result is $reduceResult")
             }
 
         }
