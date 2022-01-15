@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.gangaown.kotlinflowexample.ui.HomeViewModel
 import com.gangaown.kotlinflowexample.ui.theme.KotlinFlowExampleTutorialTheme
@@ -40,6 +41,9 @@ class HomeActivity : ComponentActivity() {
                 }
             }
         }
+
+
+
     }
 }
 
