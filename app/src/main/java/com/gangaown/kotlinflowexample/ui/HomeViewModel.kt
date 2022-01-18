@@ -2,35 +2,36 @@ package com.gangaown.kotlinflowexample.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gangaown.kotlinflowexample.DispatcherProvider
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
-class HomeViewModel: ViewModel() {
+class HomeViewModel(private val dispatchers: DispatcherProvider): ViewModel() {
 
-    val countDownFlow = flow {
-        val startingVal = 5
-        var curValue = startingVal
-        emit(startingVal)
-        while (curValue>0){
-            delay(1000L)
-            curValue--
-            emit(curValue)
-        }
-    }
+    private val _sharedFlow = MutableSharedFlow<Int>(replay = 0)
+    val sharedFlow = _sharedFlow.asSharedFlow()
     init {
-        collectFlow()
+
+        viewModelScope.launch (dispatchers.main) {
+            sharedFlow.collect{
+                delay(2000L)
+                println("The received number is $it")
+            }
+        }
+
+        viewModelScope.launch (dispatchers.main){
+            sharedFlow.collect{
+                delay(3000L)
+                println("The received number is $it")
+            }
+        }
+        squareFlow(6)
     }
 
-    private fun collectFlow(){
-
-        viewModelScope.launch {
-            val foldResult = countDownFlow
-                .fold(100) { accumulator, value ->
-                    accumulator + value
-                }
-            println("The result is $foldResult")
-            }
-
+   fun squareFlow(number:Int){
+        viewModelScope.launch (dispatchers.main) {
+                _sharedFlow.emit(number * number)
         }
     }
+}

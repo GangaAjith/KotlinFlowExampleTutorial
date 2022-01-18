@@ -10,6 +10,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,27 +20,37 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.gangaown.kotlinflowexample.ui.HomeViewModel
 import com.gangaown.kotlinflowexample.ui.theme.KotlinFlowExampleTutorialTheme
+import kotlinx.coroutines.flow.collect
 
 
 class HomeActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            KotlinFlowExampleTutorialTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(color = MaterialTheme.colors.background) {
-                    Greeting(" .....")
-                }
                 val viewModel = viewModel<HomeViewModel>()
-                val time = viewModel.countDownFlow.collectAsState(initial = 10)
-                Box(modifier = Modifier.fillMaxSize()){
-                    Text(
-                        text = time.value.toString(),
-                        fontSize  = 50.sp,
-                        fontStyle = FontStyle.Italic,
-                        modifier =  Modifier.align(Alignment.Center)
-                    )
+                LaunchedEffect(key1 = true){
+                     viewModel.sharedFlow.collect { number ->
+                        setContent{
+                            KotlinFlowExampleTutorialTheme {
+                                // A surface container using the 'background' color from the theme
+                                Surface(color = MaterialTheme.colors.background) {
+                                    Greeting(" .....")
+                                }
+                            Box(modifier = Modifier.fillMaxSize()){
+                                Text(
+                                    text = number.toString(),
+                                    fontSize  = 50.sp,
+                                    fontStyle = FontStyle.Italic,
+                                    modifier =  Modifier.align(Alignment.Center)
+                                )
+                            }
+                        }
+                    }
                 }
+
+
+
+
             }
         }
     }
