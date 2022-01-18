@@ -24,37 +24,34 @@ import kotlinx.coroutines.flow.collect
 
 
 class HomeActivity : ComponentActivity() {
+
+    private lateinit var homeViewModelFactory:HomeViewModelFactory
+    private lateinit var dispatchers: DefaultDispatchers
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        dispatchers = DefaultDispatchers()
+        homeViewModelFactory = HomeViewModelFactory(dispatchers)
         setContent {
-                val viewModel = viewModel<HomeViewModel>()
+                KotlinFlowExampleTutorialTheme {
+                // A surface container using the 'background' color from the theme
+                Surface(color = MaterialTheme.colors.background) {
+                    Greeting(" .....")
+                }
+                val homeViewModel: HomeViewModel = viewModel(factory = homeViewModelFactory)
+                homeViewModel.squareFlow(4)
                 LaunchedEffect(key1 = true){
-                     viewModel.sharedFlow.collect { number ->
-                        setContent{
-                            KotlinFlowExampleTutorialTheme {
-                                // A surface container using the 'background' color from the theme
-                                Surface(color = MaterialTheme.colors.background) {
-                                    Greeting(" .....")
-                                }
-                            Box(modifier = Modifier.fillMaxSize()){
-                                Text(
-                                    text = number.toString(),
-                                    fontSize  = 50.sp,
-                                    fontStyle = FontStyle.Italic,
-                                    modifier =  Modifier.align(Alignment.Center)
-                                )
-                            }
-                        }
+                    homeViewModel.sharedFlow.collect { number ->
+                        setContent { DisplayNumber(number = number) }
                     }
                 }
-
-
-
 
             }
         }
     }
 }
+
 
 @Composable
 fun Greeting(name: String) {
@@ -66,5 +63,18 @@ fun Greeting(name: String) {
 fun DefaultPreview() {
     KotlinFlowExampleTutorialTheme {
         Greeting("Android")
+    }
+}
+
+
+@Composable
+fun DisplayNumber(number:Int) {
+    Box(modifier = Modifier.fillMaxSize()) {
+        Text(
+            text = number.toString(),
+            fontSize = 50.sp,
+            fontStyle = FontStyle.Italic,
+            modifier = Modifier.align(Alignment.Center)
+        )
     }
 }

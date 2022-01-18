@@ -8,7 +8,7 @@ import kotlinx.coroutines.test.TestCoroutineDispatcher
 @ExperimentalCoroutinesApi
 class TestDispatchers:DispatcherProvider{
 
-    val testDispatcher = TestCoroutineDispatcher()
+    private val testDispatcher = TestCoroutineDispatcher()
 
     override val main: CoroutineDispatcher
         get() = testDispatcher
